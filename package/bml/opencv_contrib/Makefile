@@ -64,7 +64,7 @@ endef
 TARGET_LDFLAGS += -latomic
 
 define Build/Compile
-	$(call Build/Prepare/Default)
+#	$(call Build/Prepare/Default)
 endef
 
 $(eval $(call BuildPackage,opencv_contrib))
