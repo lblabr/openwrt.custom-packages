@@ -18,7 +18,7 @@ PKG_MAINTAINER:=
 PKG_LICENSE:=BSD-3-Clause
 PKG_LICENSE_FILES:=LICENSE
 
-CMAKE_INSTALL:=1
+#CMAKE_INSTALL:=1
 CMAKE_BINARY_SUBDIR:=build
 #PKG_BUILD_PARALLEL:=1
 #PKG_USE_MIPS16:=0
@@ -64,7 +64,7 @@ endef
 TARGET_LDFLAGS += -latomic
 
 define Build/Compile
-	$(call Build/Prepare/Default)
+#	$(call Build/Prepare/Default)
 endef
 
 $(eval $(call BuildPackage,opencv_contrib))
