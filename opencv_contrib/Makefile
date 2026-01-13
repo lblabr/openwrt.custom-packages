@@ -4,6 +4,7 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
+include $(TOPDIR)/rules.mk
 
 PKG_NAME:=opencv_contrib
 PKG_VERSION:=4.9.0
@@ -18,13 +19,14 @@ PKG_LICENSE:=BSD-3-Clause
 PKG_LICENSE_FILES:=LICENSE
 
 DEBUG:=all
-CMAKE_INSTALL:=0
-#CMAKE_BINARY_SUBDIR:=build
+#CMAKE_INSTALL:=0
+CMAKE_BINARY_SUBDIR:=build
 
-include $(TOPDIR)/rules.mk
+#PKG_HOST_ONLY:=1
+#PKG_INSTALL:=0
+
 include $(INCLUDE_DIR)/package.mk
 #include $(INCLUDE_DIR)/cmake.mk
-#include $(INCLUDE_DIR)/download.mk
 
 define Package/opencv_contrib/Default/description
  OpenCV (Open Source Computer Vision Library) is an open source computer
@@ -43,92 +45,29 @@ define Package/opencv_contrib
   DEPENDS:=
 endef
 
-#PKG_HOST_ONLY:=1
-PKG_INSTALL:=0
-
-#define Build/Prepare
+define Package/opencv_contrib/install
+	echo "install..."
+#	$(INSTALL_DIR) $(1)/usr/bin
 #	echo "Build/Prepare"
 #	$(call Build/Prepare/Default)
-#endef
+endef
 
-#define Build/Compile
-#	echo "Download"
-#	$(call Download,opencv_contrib)
+define Package/installDev
+	echo "InstallDev"
+#	$(INSTALL_DIR) $(1)/usr/bin
+#	echo "Build/Prepare"
 #	$(call Build/Prepare/Default)
-#	$(call Download,opencv_contrib)
-#	$(call Build/DefaultTargets)
-#	echo "compile"
-#	$(call Build/Compile/Default)
-#endef
-
-#clean:
-#	echo "Build/Prepare/Default"
-#	$(eval $(call Build/Prepare/Default))
-#	$(eval $(call Build/Prepare,opencv_contrib))
-#	echo "Package/Default"
-##	$(eval $(call Package/Default))
-#	echo "Download/Default"
-#	$(eval $(call Download/default))
-#	$(eval $(call Download,opencv_contrib))
-#	
-#	$(eval $(call Package/opencv_contrib))
-#	echo "test"
-#	$(call Build/Compile/Default)
-#	$(call BuildPackage1,opencv_contrib)
-#	$(eval $(call BuildPackage,opencv_contrib))
-#	echo "Build/Target"
-#	$(eval $(call Build/Target,opencv_contrib))
-
-define Build/DefaultTargets1
-  $(if $(PKG_SKIP_DOWNLOAD),,$(if $(strip $(PKG_SOURCE_URL)),$(call Download,default)))
-#  $(if $(DUMP),,$(Build/CoreTargets))
-
-  define Build/DefaultTargets1
-  endef
 endef
 
-define BuildPackage1
-  $(eval $(Package/Default))
-  $(eval $(Package/$(1)))
-  $(echo "asdasd")
-#  BUILD_PACKAGES += $(1)
-#  $(STAMP_PREPARED): $$(if $(QUILT)$(DUMP),,$(call find_library_dependencies,$(1)))
-
-#  $(foreach FIELD, TITLE CATEGORY SECTION VERSION,
-#    ifeq ($($(FIELD)),)
-#      $$(error Package/$(1) is missing the $(FIELD) field)
-#    endif
-#  )
-
-#  $(if $(DUMP), \
-#    $(if $(CHECK),,$(Dumpinfo/Package)), \
-#    $(foreach target, \
-#      $(if $(Package/$(1)/targets),$(Package/$(1)/targets), \
-#        $(if $(PKG_TARGETS),$(PKG_TARGETS), ipkg) \
-#      ), $(BuildTarget/$(target)) \
-#    ) \
-#  )
-
-  $(if $(PKG_HOST_ONLY),,$(call Build/DefaultTargets1,$(1)))
+define Build/Prepare
+	echo "Build/Prepare"
+	$(call Build/Prepare/Default)
+	echo "Build/Prepare"
 endef
 
-test:
-#	echo "Build/Prepare/Default"
-#	$(eval $(call Build/Prepare/Default))
-#	$(eval $(call Build/Prepare,opencv_contrib))
-#	echo "Package/Default"
-##	$(eval $(call Package/Default))
-#	echo "Download/Default"
-#	$(eval $(call Download/default))
-#	$(eval $(call Download,opencv_contrib))
-#	
-#	$(eval $(call Package/opencv_contrib))
-#	echo "test"
-#	$(call Build/Compile/Default)
-#	$(call BuildPackage1,opencv_contrib)
-  $(eval $(call BuildPackage1,opencv_contrib))
-#	echo "Build/Target"
-#	$(eval $(call Build/Target,opencv_contrib))
+define Build/Compile
+	echo "Compile"
+endef
 
-#$(eval $(call Build/DefaultTargets,opencv_contrib))
-$(eval $(call BuildPackage1,opencv_contrib))
+
+$(eval $(call BuildPackage,opencv_contrib))
