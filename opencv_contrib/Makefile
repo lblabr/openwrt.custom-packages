@@ -4,7 +4,6 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-include $(TOPDIR)/rules.mk
 
 PKG_NAME:=opencv_contrib
 PKG_VERSION:=4.9.0
@@ -18,13 +17,14 @@ PKG_MAINTAINER:=
 PKG_LICENSE:=BSD-3-Clause
 PKG_LICENSE_FILES:=LICENSE
 
-#CMAKE_INSTALL:=1
-CMAKE_BINARY_SUBDIR:=build
-#PKG_BUILD_PARALLEL:=1
-#PKG_USE_MIPS16:=0
+DEBUG:=all
+CMAKE_INSTALL:=0
+#CMAKE_BINARY_SUBDIR:=build
 
+include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/package.mk
-include $(INCLUDE_DIR)/cmake.mk
+#include $(INCLUDE_DIR)/cmake.mk
+#include $(INCLUDE_DIR)/download.mk
 
 define Package/opencv_contrib/Default/description
  OpenCV (Open Source Computer Vision Library) is an open source computer
@@ -40,31 +40,95 @@ define Package/opencv_contrib
   CATEGORY:=bml
   TITLE:=OpenCV contrib
   URL:=https://opencv.org/
-  DEPENDS:=+libpthread +librt +libatomic +libstdcpp +zlib +libjpeg
+  DEPENDS:=
 endef
 
-#PKG_INSTALL:=1
+#PKG_HOST_ONLY:=1
+PKG_INSTALL:=0
 
-#CMAKE_OPTIONS += \
-#	-DBUILD_opencv_gpu:BOOL=OFF \
-#	-DWITH_1394:BOOL=OFF -DBUILD_opencv_stitching:BOOL=OFF \
-#	-DBUILD_opencv_superres:BOOL=OFF -DBUILD_opencv_ts:BOOL=OFF \
-#	-DBUILD_opencv_highgui:BOOL=OFF \
-#	-DBUILD_opencv_videostab:BOOL=OFF \
-#	-DWITH_FFMPEG:BOOL=OFF \
-#	-DWITH_GSTREAMER:BOOL=ON \
-#	-DWITH_LIBV4L:BOOL=OFF \
-#	-DWITH_PNG:BOOL=OFF \
-#	-DWITH_GTK:BOOL=OFF \
-#	-DWITH_TIFF:BOOL=OFF \
-#	-DCMAKE_VERBOSE:BOOL=OFF \
-#	-DENABLE_PRECOMPILED_HEADERS=OFF \
-#	-DOPENCV_GENERATE_PKGCONFIG=ON \
-
-TARGET_LDFLAGS += -latomic
-
-define Build/Compile
+#define Build/Prepare
+#	echo "Build/Prepare"
 #	$(call Build/Prepare/Default)
+#endef
+
+#define Build/Compile
+#	echo "Download"
+#	$(call Download,opencv_contrib)
+#	$(call Build/Prepare/Default)
+#	$(call Download,opencv_contrib)
+#	$(call Build/DefaultTargets)
+#	echo "compile"
+#	$(call Build/Compile/Default)
+#endef
+
+#clean:
+#	echo "Build/Prepare/Default"
+#	$(eval $(call Build/Prepare/Default))
+#	$(eval $(call Build/Prepare,opencv_contrib))
+#	echo "Package/Default"
+##	$(eval $(call Package/Default))
+#	echo "Download/Default"
+#	$(eval $(call Download/default))
+#	$(eval $(call Download,opencv_contrib))
+#	
+#	$(eval $(call Package/opencv_contrib))
+#	echo "test"
+#	$(call Build/Compile/Default)
+#	$(call BuildPackage1,opencv_contrib)
+#	$(eval $(call BuildPackage,opencv_contrib))
+#	echo "Build/Target"
+#	$(eval $(call Build/Target,opencv_contrib))
+
+define Build/DefaultTargets1
+  $(if $(PKG_SKIP_DOWNLOAD),,$(if $(strip $(PKG_SOURCE_URL)),$(call Download,default)))
+#  $(if $(DUMP),,$(Build/CoreTargets))
+
+  define Build/DefaultTargets1
+  endef
 endef
 
-$(eval $(call BuildPackage,opencv_contrib))
+define BuildPackage1
+  $(eval $(Package/Default))
+  $(eval $(Package/$(1)))
+  $(echo "asdasd")
+#  BUILD_PACKAGES += $(1)
+#  $(STAMP_PREPARED): $$(if $(QUILT)$(DUMP),,$(call find_library_dependencies,$(1)))
+
+#  $(foreach FIELD, TITLE CATEGORY SECTION VERSION,
+#    ifeq ($($(FIELD)),)
+#      $$(error Package/$(1) is missing the $(FIELD) field)
+#    endif
+#  )
+
+#  $(if $(DUMP), \
+#    $(if $(CHECK),,$(Dumpinfo/Package)), \
+#    $(foreach target, \
+#      $(if $(Package/$(1)/targets),$(Package/$(1)/targets), \
+#        $(if $(PKG_TARGETS),$(PKG_TARGETS), ipkg) \
+#      ), $(BuildTarget/$(target)) \
+#    ) \
+#  )
+
+  $(if $(PKG_HOST_ONLY),,$(call Build/DefaultTargets1,$(1)))
+endef
+
+test:
+#	echo "Build/Prepare/Default"
+#	$(eval $(call Build/Prepare/Default))
+#	$(eval $(call Build/Prepare,opencv_contrib))
+#	echo "Package/Default"
+##	$(eval $(call Package/Default))
+#	echo "Download/Default"
+#	$(eval $(call Download/default))
+#	$(eval $(call Download,opencv_contrib))
+#	
+#	$(eval $(call Package/opencv_contrib))
+#	echo "test"
+#	$(call Build/Compile/Default)
+#	$(call BuildPackage1,opencv_contrib)
+  $(eval $(call BuildPackage1,opencv_contrib))
+#	echo "Build/Target"
+#	$(eval $(call Build/Target,opencv_contrib))
+
+#$(eval $(call Build/DefaultTargets,opencv_contrib))
+$(eval $(call BuildPackage1,opencv_contrib))
