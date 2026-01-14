@@ -40,7 +40,7 @@ define Package/opencv
   CATEGORY:=bml
   TITLE:=OpenCV
   URL:=https://opencv.org/
-  DEPENDS:=+libpthread +librt +libatomic +libstdcpp +zlib +libjpeg +libfreetype +glib2 +harfbuzz +libwebp
+  DEPENDS:=+libpthread +librt +libatomic +libstdcpp +zlib +libjpeg +libfreetype +glib2 +harfbuzz +libwebp +opencv_contrib
 endef
 
 #PKG_INSTALL:=1
